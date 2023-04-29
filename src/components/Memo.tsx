@@ -8,7 +8,7 @@ const DONE = "完了";
 
 export const Memo: React.FC<{}> = (): any => {
   const [text, setText] = useState<string>("");
-  const [todos, setTodo] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const todoList: Todo[] = [...todos];
 
@@ -22,11 +22,15 @@ export const Memo: React.FC<{}> = (): any => {
       contents: textRef.current.value,
       status: WORK_ON_PROGRESS,
     };
-    setTodo([...todos, newTodo]);
+    setTodos([...todos, newTodo]);
     setText("");
   };
   const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     setText(() => e.target.value);
+  };
+
+  const deleteTodo = (id: number): void => {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
   const displayTodo = (): JSX.Element => {
@@ -41,7 +45,13 @@ export const Memo: React.FC<{}> = (): any => {
               <button>作業中</button>
             </th>
             <th>
-              <button>削除</button>
+              <button
+                onClick={() => {
+                  deleteTodo(todo.id);
+                }}
+              >
+                削除
+              </button>
             </th>
           </tr>
         </>
