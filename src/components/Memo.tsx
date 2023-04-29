@@ -33,6 +33,16 @@ export const Memo: React.FC<{}> = (): any => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
+  const changeStatus = (id: number): void => {
+    const target: Todo[] = todoList.filter((todo) => todo.id === id);
+    if (target[0].status === WORK_ON_PROGRESS) {
+      target[0].status = DONE;
+    } else {
+      target[0].status = WORK_ON_PROGRESS;
+    }
+    setTodos(todoList);
+  };
+
   const displayTodo = (): JSX.Element => {
     const list = todoList.map((todo) => {
       return (
@@ -42,7 +52,15 @@ export const Memo: React.FC<{}> = (): any => {
             <th>{todo.id}</th>
             <th>{todo.contents}</th>
             <th>
-              <button>作業中</button>
+              <th>
+                {todo.status === WORK_ON_PROGRESS ? (
+                  <button onClick={() => changeStatus(todo.id)}>
+                    {WORK_ON_PROGRESS}
+                  </button>
+                ) : (
+                  <button onClick={() => changeStatus(todo.id)}>{DONE}</button>
+                )}
+              </th>
             </th>
             <th>
               <button
