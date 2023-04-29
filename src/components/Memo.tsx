@@ -1,7 +1,7 @@
 // todoList[]を表示する　newTodo{}を追加する
 
-import React, { ChangeEvent, useState } from "react";
-import { Todo, TodoList } from "./Type";
+import React, { ChangeEvent, useRef, useState } from "react";
+import { Todo } from "./Type";
 
 const WORK_ON_PROGRESS = "作業中";
 const DONE = "完了";
@@ -10,25 +10,21 @@ export const Memo: React.FC<{}> = (): any => {
   const [text, setText] = useState<string>("");
   const [todos, setTodo] = useState<Todo[]>([]);
 
-  const todoList: TodoList = [...todos];
+  const todoList: Todo[] = [...todos];
 
-  const textRef = React.createRef<HTMLInputElement>();
+  const textRef = useRef<HTMLInputElement>(null!);
 
   const addTodo = () => {
-    if (textRef["current"] !== null) {
-      const date: Date = new Date();
-      const createdDate: number = date.getTime();
-      const newTodo: Todo = {
-        id: createdDate,
-        contents: textRef["current"].value,
-        status: WORK_ON_PROGRESS,
-      };
-      todoList.push(newTodo);
-      setTodo(todoList);
-      setText("");
-    }
+    const date = new Date();
+    const createdDate: number = date.getTime();
+    const newTodo: Todo = {
+      id: createdDate,
+      contents: textRef.current.value,
+      status: WORK_ON_PROGRESS,
+    };
+    setTodo([...todos, newTodo]);
+    setText("");
   };
-
   const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     setText(() => e.target.value);
   };

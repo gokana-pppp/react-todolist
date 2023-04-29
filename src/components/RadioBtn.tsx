@@ -4,11 +4,11 @@ import React from "react";
 export const RadioBtn = (): JSX.Element => {
   return (
     <>
-      <input type="radio" checked />
+      <input type="radio" name="status" checked />
       すべて
-      <input type="radio" />
+      <input type="radio" name="status" />
       作業中
-      <input type="radio" />
+      <input type="radio" name="status" />
       完了
     </>
   );
