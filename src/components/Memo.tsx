@@ -10,8 +10,6 @@ export const Memo: React.FC<{}> = (): any => {
   const [text, setText] = useState<string>("");
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const todoList: Todo[] = [...todos];
-
   const textRef = useRef<HTMLInputElement>(null!);
 
   const addTodo = () => {
@@ -25,6 +23,7 @@ export const Memo: React.FC<{}> = (): any => {
     setTodos([...todos, newTodo]);
     setText("");
   };
+
   const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     setText(() => e.target.value);
   };
@@ -34,17 +33,21 @@ export const Memo: React.FC<{}> = (): any => {
   };
 
   const changeStatus = (id: number): void => {
-    const target: Todo[] = todoList.filter((todo) => todo.id === id);
-    if (target[0].status === WORK_ON_PROGRESS) {
-      target[0].status = DONE;
-    } else {
-      target[0].status = WORK_ON_PROGRESS;
-    }
-    setTodos(todoList);
+    setTodos(
+      todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            status: todo.status === WORK_ON_PROGRESS ? DONE : WORK_ON_PROGRESS,
+          };
+        }
+        return todo;
+      })
+    );
   };
 
   const displayTodo = (): JSX.Element => {
-    const list = todoList.map((todo) => {
+    const list = todos.map((todo) => {
       return (
         <>
           {" "}
@@ -52,15 +55,9 @@ export const Memo: React.FC<{}> = (): any => {
             <th>{todo.id}</th>
             <th>{todo.contents}</th>
             <th>
-              <th>
-                {todo.status === WORK_ON_PROGRESS ? (
-                  <button onClick={() => changeStatus(todo.id)}>
-                    {WORK_ON_PROGRESS}
-                  </button>
-                ) : (
-                  <button onClick={() => changeStatus(todo.id)}>{DONE}</button>
-                )}
-              </th>
+              <button onClick={() => changeStatus(todo.id)}>
+                {todo.status}
+              </button>
             </th>
             <th>
               <button
@@ -100,7 +97,7 @@ export const Memo: React.FC<{}> = (): any => {
             ref={textRef}
             onChange={onChangeText}
           />
-          <button onClick={addTodo}>追加</button>
+          <button onClick={() => addTodo()}>追加</button>
         </div>
       </div>
     </>
