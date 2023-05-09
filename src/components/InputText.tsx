@@ -1,6 +1,6 @@
 import { Props } from "./Type";
 
-export const InputText = (props: Props): any => {
+export const InputText: React.FC<Props> = (props) => {
   const { text, textRef, onChange, onClick } = props;
 
   return (
